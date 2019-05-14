@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
+<% include layout/head %>
+
 <body>
-    <h1>선택하신 날짜의 메뉴는</h1>
-    <p><%= data %></p>
+    <% include layout/nav %>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-10 offset-1">
+                <div class="card">
+                    <div class="card-header bg-info text-light">
+                        <h4><%= date %> 날짜의 메뉴</h4>
+                    </div>
+                    <div class="card-body">
+                        <p><%= data %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

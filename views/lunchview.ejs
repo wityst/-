@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>점심메뉴</title>
-</head>
+<% include layout/head %>
+
 <body>
-    <h1>점심을 보고 싶은 날짜를 선택하세요</h1>
-    <form action="/lunch" method="post">
-        <input type="date" name="date">
-        <input type="submit" value="보기">
-    </form>
+    <% include layout/nav %>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-12">
+                <h1>점심을 보고 싶은 날짜를 선택하세요</h1>
+                <div class="row mt-4">
+                    <div class="col-10 offset-1">
+                        <form action="/lunch" method="post" class="form-inline">
+                            <div class="form-group">
+                                <label for="date">날짜 입력</label>
+                                <input type="date" class="form-control mx-4" name="date" id="date">
+                            </div>
+                            <button type="submit" class="btn btn-success">가져오기</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

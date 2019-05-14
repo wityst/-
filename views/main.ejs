@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
+<% include layout/head %>
+
 <body>
-    <h1><%= title %></h1>
+    <% include layout/nav %>
+
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-10 offset-1">
+                <div class="jumbotron">
+                    <h1><%= title %></h1>
+                    <p class="lead">사이트는 심플한 Express 사이트입니다.</p>
+                    <hr class="my-4">
+                    <p>뭔가 채워야하는데 너무 귀찮아요</p>
+
+                    <div class="d-flex justify-content-end">
+                        <a href="/lunch" class="btn btn-primary btn-lg">급식보기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
