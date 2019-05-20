@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<% include layout/head %>
+
+<body>
+    <% include layout/nav %>
+
+    <div class="container">
+        <h2>로그인 페이지</h2>
+        <div class="row mt-4">
+            <div class="col-10 offset-1">
+                <form method="post">
+                    <div class="form-group">
+                        <label for="email">이메일</label>
+                        <input type="email" class="form-control" 
+                        id="email" name="email" placeholder="사용자 이메일 입력">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">비밀번호</label>
+                        <input type="password" class="form-control"
+                         id="password" name="password" placeholder="비밀번호 입력">
+                    </div>
+                    <button type="submit" class="btn btn-primary">로그인</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

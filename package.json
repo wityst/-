@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {"type": "git",
+  "repository": {
+    "type": "git",
     "url":"https://github.com/gondr99/jsafter.git"
   },
   "author": "gondr",

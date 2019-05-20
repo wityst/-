@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<% include layout/head %>
+
+<body>
+    <% include layout/nav %>
+
+    <div class="container">
+        <h2>에러페이지</h2>
+        <div class="row mt-4">
+            <div class="col-10 offset-1">
+                <div class="card">
+                    <div class="card-header">
+                        <%= head %>
+                    </div>
+                    <div class="card-body">
+                        <%= msg %>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary prev">이전</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
