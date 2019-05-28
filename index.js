@@ -32,12 +32,27 @@ app.use(session({
     secret:"gondr"   //사용자한테 보내지는 쿠키를 암호화할 때 쓸 키
 }));
 
+function checkLogin(req, res){
+    if(req.session.user == undefined){
+        req.session.flashMsg = {type:'warning', msg:'로그인 후 시도하세요'};
+        res.redirect('back');
+        return false;
+    }
+    return true;
+}
+
 //플래시 메시지 처리 미들웨어 시작
 app.use((req, res, next)=> {
     if(req.session.flashMsg != undefined){
         res.locals.flash = req.session.flashMsg;
         delete req.session.flashMsg;
     }
+
+    if(req.session.user != undefined){
+        res.locals.user = req.session.user;
+    }
+
+    //console.log(req.path);
     next();
 });
 //플래시 메시지 처리 미들웨어 끝
@@ -67,14 +82,14 @@ app.post('/register', function(req, res) {
     let data = req.body;
     if(data.email == "" || data.password == "" || data.username == ""){
         req.session.flashMsg 
-            = {'type':'danger', msg:'필수값이 누락되었습니다.'};
+            = {type:'danger', msg:'필수값이 누락되었습니다.'};
         res.redirect("/register");
         return;
     }
 
     if(data.password != data.passcheck){
         req.session.flashMsg 
-            = {'type':'danger', msg:'비밀번호와 확인이 일치하지 않습니다.'};
+            = {type:'danger', msg:'비밀번호와 확인이 일치하지 않습니다.'};
         res.redirect("/register");
         return;
     }
@@ -97,13 +112,93 @@ app.post('/register', function(req, res) {
             return;
         }
         req.session.flashMsg 
-            = {'type':'success', msg:'회원가입이 성공적으로 이루어졌습니다.'};
+            = {type:'success', msg:'회원가입이 성공적으로 이루어졌습니다.'};
         res.redirect("/");
     });
 });
 
 app.get('/login', (req, res)=>{
     res.render('login');
+});
+
+app.post('/login', (req, res)=>{
+    let email = req.body.email;
+    let pass = req.body.password;
+
+    //console.log(email, pass);
+    let sql = "SELECT * FROM users WHERE email = ? AND password = PASSWORD(?)";
+    conn.query(sql, [email, pass], (err, result)=>{
+        if(err){
+            req.session.flashMsg = {type:'danger', msg:'DB오류'};
+            res.redirect("/login");
+            return;
+        }
+
+        if(result.length == 1){
+            //로그인 성공
+            console.log(result[0]);
+            req.session.user = result[0];
+            req.session.flashMsg = {type:'success', msg:'로그인 되었습니다.'};
+
+            res.redirect('/');
+        }else{
+            //로그인 실패
+            req.session.flashMsg = {type:'warning', msg:'아이디와 비밀번호가 일치하지 않습니다.'};
+            res.redirect('back');
+        }
+    });
+});
+
+app.get('/logout', (req, res)=>{
+    if(!checkLogin(req, res)){
+        return;
+    }
+    delete req.session.user;
+    req.session.flashMsg = {'type':'success', msg:'로그아웃되었습니다.'};
+    res.redirect('/');
+});
+
+app.get('/board', (req, res)=>{
+    res.render('board/board', {});
+});
+
+app.get('/board/write', (req, res)=>{
+    if(!checkLogin(req, res)){
+        return;
+    }
+    res.render('board/write', {});
+});
+
+app.post('/board/write', (req, res) =>{
+    if(!checkLogin(req, res)){
+        return;
+    }
+
+    let writer = req.session.user.email;
+    let title = req.body.title;
+    let content = req.body.content;
+
+    if(title == "" || content == ""){
+        req.session.flashMsg = {type:'warning', msg:'값에 공백이 있습니다. 모든 값을 채워주세요'};
+        res.redirect('back');
+        return;
+    }
+
+    let sql = "INSERT INTO boards (title, writer, content) VALUES (?, ?, ?)";
+    conn.query(sql, [title, writer, content], (err, result)=>{
+        if(err){
+            req.session.flashMsg = {type:'danger', msg:'데이터베이스 오류 발생'};            
+            res.redirect('back');
+            return;
+        }
+        if(result.affectedRows == 1){
+            req.session.flashMsg = {type:'success', msg:'성공적으로 글 작성'};
+            res.redirect('/board');
+        }else{
+            req.session.flashMsg = {type:'warning', msg:'글작성 실패'};
+            res.redirect('back');
+        }
+    });
 });
 
 let server = http.createServer(app);

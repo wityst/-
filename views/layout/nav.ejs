@@ -12,21 +12,30 @@
             <li class="nav-item">
                 <a class="nav-link" href="/lunch">양디점심</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/board">게시판</a>
+            </li>
         </ul>
+
         <div class="btn-box">
+            <% if(locals.user) { %>
+            <button class="btn btn-primary"><%= locals.user.name %></button>
+            <a href="/logout" class="btn btn-danger">로그아웃</a>
+            <% }else { %>
             <a href="/register" class="btn btn-info">회원가입</a>
             <a href="/login" class="btn btn-primary">로그인</a>
+            <% } %>
         </div>
 
     </div>
 </nav>
 
 <% if(locals.flash) { %>
-    <div class="alert alert-<%= flash.type %> 
+<div class="alert alert-<%= flash.type %> 
             alert-dismissible fade show" role="alert">
-        <strong>메시지</strong> <%= flash.msg %>
-        <button type="button" class="close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+    <strong>메시지</strong> <%= flash.msg %>
+    <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 <% } %>

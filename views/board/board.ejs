@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<% include ../layout/head %>
+
+<body>
+    <% include ../layout/nav %>
+
+    <div class="container">
+        <h1>자유게시판</h1>
+        <div class="row mt-4">
+            <div class="col-10 offset-1">
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                        <tr class="text-center">
+                            <th>글번호</th>
+                            <th width="70%">제목</th>
+                            <th>글쓴이</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <% if(locals.user) { %>
+        <div class="row mt-3">
+            <div class="col-10 offset-1 text-right">
+                <a href="/board/write" class="btn btn-primary">글쓰기</a>
+            </div>
+        </div>
+        <% } %>
+    </div>
+</body>
+
+</html>
