@@ -136,7 +136,6 @@ app.post('/login', (req, res)=>{
 
         if(result.length == 1){
             //로그인 성공
-            console.log(result[0]);
             req.session.user = result[0];
             req.session.flashMsg = {type:'success', msg:'로그인 되었습니다.'};
 
@@ -159,7 +158,21 @@ app.get('/logout', (req, res)=>{
 });
 
 app.get('/board', (req, res)=>{
-    res.render('board/board', {});
+    //페이징 나중에 처리할 것
+    
+    let sql = "SELECT b.*, u.name FROM boards AS b, users AS u "
+            + " WHERE u.email = b.writer " 
+            + " ORDER BY b.id DESC LIMIT 0, 10";
+
+    conn.query(sql, [], (err, result)=>{
+        if(err) {
+            res.render('error', {
+                head:"에러 발생", 
+                msg:`글을 불러오는 중 오류가 발생했습니다.`});
+            return;
+        }
+        res.render('board/board', {list:result});
+    });
 });
 
 app.get('/board/write', (req, res)=>{
@@ -199,6 +212,59 @@ app.post('/board/write', (req, res) =>{
             res.redirect('back');
         }
     });
+});
+
+app.get('/board/view/:id', (req, res) => {
+    let id = req.params.id;
+
+    let sql = "SELECT b.*, u.name FROM boards AS b, users AS u "
+            + " WHERE id = ? AND u.email = b.writer";
+    conn.query(sql, [id], (err, result)=>{
+        if(err){
+            res.render('error', {
+                head:"에러 발생", 
+                msg:`${id}번 글은 존재하지 않습니다.`});
+            return;
+        }
+        let data = result[0];
+        data.content = data.content.replace(/\n/g, "<br>");
+        res.render('board/view', {data:data});
+    });
+});
+
+app.get('/board/del/:id', (req, res)=>{
+    let id = req.params.id;
+    if(!checkLogin(req, res)){
+        res.render('error', {
+            head:"에러 발생", 
+            msg:`권한이 없습니다.`});
+        return;
+    }
+    let sql = "SELECT * FROM boards WHERE id = ?";
+    conn.query(sql, [id], (err, result)=>{
+        if(err || result.length == 0 
+            || result[0].writer != req.session.user.email){
+            res.render('error', {
+                head:"에러 발생", 
+                msg:`글이 존재하지 않거나 권한이 없습니다.`});
+            return;
+        }
+
+        let sql = "DELETE FROM boards WHERE id = ?";
+        conn.query(sql, [id], (err, result)=>{
+            //에러처리 귀찮아서 안함.
+            req.session.flashMsg 
+                = {type:'success', msg:'성공적으로 삭제'};
+            res.redirect('/board');
+        });
+    });
+});
+
+app.all("*", (req, res)=>{
+    res.render('error', {
+        head:"에러 발생", 
+        msg:`존재하지 않는 페이지입니다.`});
+    return;
 });
 
 let server = http.createServer(app);

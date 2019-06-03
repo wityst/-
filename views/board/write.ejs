@@ -1,7 +1,22 @@
 <!DOCTYPE html>
 <html lang="ko">
 <% include ../layout/head %>
-
+<script src="/ckeditor/ckeditor.js"></script>
+<script src="/ckeditor/translations/ko.js"></script>
+<script>
+window.addEventListener("load", ()=>{
+    ClassicEditor
+        .create(document.querySelector("#editor"))
+        .then( editor => {
+            console.log(editor);
+        });
+});
+</script>
+<style>
+    .ck-editor__editable {
+        min-height: 400px;
+    }
+</style>
 <body>
     <% include ../layout/nav %>
 
@@ -18,7 +33,7 @@
 
                     <div class="form-group">
                         <label>글 내용</label>
-                        <textarea type="text" class="form-control" name="content"
+                        <textarea id="editor" type="text" class="form-control" name="content"
                             placeholder="글 내용을 입력하세요" rows="5"></textarea>
                     </div>
 

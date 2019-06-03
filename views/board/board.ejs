@@ -17,6 +17,19 @@
                             <th>글쓴이</th>
                         </tr>
                     </thead>
+                    <tbody>
+                        <% for (let i = 0; i < list.length; i++) { %>
+                            <tr class="text-center">
+                                <td><%= list[i].id %></td>
+                                <td>
+                                    <a href="/board/view/<%= list[i].id %>">
+                                        <%= list[i].title %>
+                                    </a>
+                                </td>
+                                <td><%= list[i].name %></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
                 </table>
             </div>
         </div>

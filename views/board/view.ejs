@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<% include ../layout/head %>
+
+<body>
+    <% include ../layout/nav %>
+
+    <div class="container">
+        <h1>글 보기</h1>
+        <div class="row mt-4 d-flex justify-content-center">
+            <div class="col-10">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <span><%= data.id %> . <%= data.title %></span>
+                        <span class="badge badge-primary p-2">
+                            글쓴이 : <%= data.name %>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <%- data.content %>
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-primary" href="/board">목록보기</a>
+                        <% if(locals.user && locals.user.email == data.writer) { %>
+                        <a class="btn btn-danger" href="/board/del/<%= data.id %>">삭제</a>
+                        <a class="btn btn-info" href="/board/mod/<%= data.id %>">수정</a>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
