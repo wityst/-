@@ -13,7 +13,7 @@ const lunch = require("./lunch");
 const session = require('express-session');
 
 const conn = mysql.createConnection(dbSecret);
-conn.query("USE yy_20125");
+conn.query("USE yy_20105");
 
 //익스프레스 만들기
 let app = express();
