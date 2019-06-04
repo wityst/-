@@ -19,19 +19,33 @@
                     </thead>
                     <tbody>
                         <% for (let i = 0; i < list.length; i++) { %>
-                            <tr class="text-center">
-                                <td><%= list[i].id %></td>
-                                <td>
-                                    <a href="/board/view/<%= list[i].id %>">
-                                        <%= list[i].title %>
-                                    </a>
-                                </td>
-                                <td><%= list[i].name %></td>
-                            </tr>
+                        <tr class="text-center">
+                            <td><%= list[i].id %></td>
+                            <td>
+                                <a href="/board/view/<%= list[i].id %>">
+                                    <%= list[i].title %>
+                                </a>
+                            </td>
+                            <td><%= list[i].name %></td>
+                        </tr>
                         <% } %>
                     </tbody>
                 </table>
             </div>
+        </div>
+
+        <div class="row mt-3 justify-content-center d-flex">
+            <ul class="pagination">
+                <%if(p.prev){%>
+                <li><a href="#" class="page-link">이전</a></li>
+                <%}%>
+                <%for(let i= p.startPage;i <= p.endPage;i++){%>
+                <li><a href="/board?p=<%=p.startPage - 1%>" class="page-link"><%=i%></a></li>
+                <%}%>
+                <%if(p.next){%>
+                <li><a href="/board?p=<%=p.endPage+ 1%>" class="page-link">다음</a></li>
+                <%}%>
+            </ul>
         </div>
 
         <% if(locals.user) { %>
