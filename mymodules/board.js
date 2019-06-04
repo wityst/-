@@ -21,6 +21,7 @@ router.get('/', (req, res)=>{
 	if(page == undefined || page <1) {
 		page = 1;
 	}
+	page = parseInt(page);
 
 	let sql = "SELECT b.*, u.name FROM boards AS b, users AS u "
 	+ " WHERE u.email = b.writer " 
@@ -36,20 +37,23 @@ router.get('/', (req, res)=>{
 		let list = result;
 		conn.query("SELECT count(*) AS cnt FROM boards",[],(err,result)=>{
 			let p ={};
+			p.nowPage = page;
 			p.cnt =	result[0].cnt;
 			p.totlaPage = Math.ceil(p.cnt / 10);
-			p.endPage = Math.ceil(page / 5)*5;
-			p.startPage = p.endPage - 4;
+			p.endPage = page + 1;
+			p.startPage = page - 1;
 			p.prev = true;
 			p.next = true;
-			if(p.totlaPage <= p.endPage) {
+			if(p.totlaPage -1 < p.endPage) {
 				p.endPage = p.totlaPage;
+				p.startPage = p.totlaPage - 2;
 				p.next = false;
 			}
-			if(p.startPage == 1) {
+			if(p.startPage <= 1) {
 				p.prev = false;
+				p.startPage = 1;
+				p.endPage = 3;
 			}
-			console.log(p.totlaPage,p.startPage,p.endPage);
 
 			res.render('board/board', {list:list,p:p});
 		})
